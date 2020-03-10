@@ -15,9 +15,6 @@ app.secret_key = os.urandom(16)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
 app.config['JWT_AUTH_URL_RULE'] = '/login'  # replace path // auth -> login
 # config JWT to expire within half an hour
@@ -53,4 +50,9 @@ api.add_resource(AddStore, '/store')
 if __name__ == '__main__':
     from src.database.ORM import db  # avoid circular import
     db.init_app(app)
+
+    if app.config['DEBUG']:
+        @app.before_first_request
+        def create_tables():
+            db.create_all()
     app.run(debug=True, port=5000)
