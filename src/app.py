@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(16)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')  #'sqlite:///data.db' -> sqlite3 was just for tests
 
 app.config['DEBUG'] = True
 app.config['JWT_AUTH_URL_RULE'] = '/login'  # replace path // auth -> login
