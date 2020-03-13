@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
-
+from flask_jwt_extended import jwt_required, fresh_jwt_required
 from src.models.item import Item
+
 
 class ItemRegister(Resource):
     parser = reqparse.RequestParser()
@@ -20,7 +20,7 @@ class ItemRegister(Resource):
                         help="every item needs a store_id!"
                         )
 
-    @jwt_required()
+    @fresh_jwt_required  # if you don't have a fresh token you won't login != jwt_required you need just an access token
     def post(self):
         data = ItemRegister.parser.parse_args()
         item = Item(name=data['name'], price=data['price'], store_id=data['store_id'])
@@ -30,13 +30,13 @@ class ItemRegister(Resource):
 
 class Item_(Resource):
 
-    @jwt_required()
+    @jwt_required
     def get(self):
         return Item.getAll()
 
 
 class GetOneItem(Resource):
 
-    @jwt_required()
+    @jwt_required
     def get(self, name):
         return Item.getItemByName(name).json()

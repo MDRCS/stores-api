@@ -1,4 +1,3 @@
-import json
 from src.database.ORM import db
 
 
